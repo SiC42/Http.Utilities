@@ -1,8 +1,23 @@
 using System.Collections;
 
-internal class QueryParameters : IEnumerable<QueryParameter>
+namespace Sic.Http.Utilities.UrlBuilding.QueryParameters;
+internal class QueryParameterCollection : IReadOnlyQueryParameterCollection
 {
-  private readonly Dictionary<string, List<QueryParameter>> _dictionary = new();
+  private readonly Dictionary<string, List<QueryParameter>> _dictionary;
+
+  public int Count => _dictionary.Values.SelectMany(v => v).Count();
+
+  public QueryParameterCollection()
+  {
+    _dictionary = [];
+  }
+
+  public QueryParameterCollection(QueryParameterCollection queryParameters)
+  {
+    _dictionary = queryParameters._dictionary
+      .Select(kvp => (kvp.Key, Values: kvp.Value))
+      .ToDictionary(kvp => kvp.Key, kvp => kvp.Values);
+  }
 
   public void Add(QueryParameter parameter)
   {

@@ -5,7 +5,11 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A8ABB583-A211-4E80-8DE1-0DED7E08C5B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlBuilder", "src\UrlBuilder\UrlBuilder.csproj", "{F2149AC4-5316-4AEA-B3CC-7D4C6322D9BB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlBuilder", "src\UrlBuilding\UrlBuilding.csproj", "{F2149AC4-5316-4AEA-B3CC-7D4C6322D9BB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{989EABE2-B809-4002-9C23-85B7B1C15A8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlBuilding.Tests", "test\UrlBuilding.Tests\UrlBuilding.Tests.csproj", "{14397569-9123-474A-9465-A6191B47EA7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,8 +24,13 @@ Global
 		{F2149AC4-5316-4AEA-B3CC-7D4C6322D9BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2149AC4-5316-4AEA-B3CC-7D4C6322D9BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2149AC4-5316-4AEA-B3CC-7D4C6322D9BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14397569-9123-474A-9465-A6191B47EA7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14397569-9123-474A-9465-A6191B47EA7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14397569-9123-474A-9465-A6191B47EA7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14397569-9123-474A-9465-A6191B47EA7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F2149AC4-5316-4AEA-B3CC-7D4C6322D9BB} = {A8ABB583-A211-4E80-8DE1-0DED7E08C5B9}
+		{14397569-9123-474A-9465-A6191B47EA7E} = {989EABE2-B809-4002-9C23-85B7B1C15A8A}
 	EndGlobalSection
 EndGlobal

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNameSpace>Sic.Http</RootNameSpace>
+    <RootNameSpace>Sic.Http.Utilities.UrlBuilding.Tests</RootNameSpace>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\UrlBuilder\UrlBuilder.csproj" />
+    <ProjectReference Include="..\..\src\UrlBuilding\UrlBuilding.csproj" />
   </ItemGroup>
 
 </Project>

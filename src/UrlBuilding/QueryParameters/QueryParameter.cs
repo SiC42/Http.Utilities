@@ -1,4 +1,5 @@
-internal readonly record struct QueryParameter
+namespace Sic.Http.Utilities.UrlBuilding;
+public readonly struct QueryParameter
 {
   private readonly string queryParam;
 
@@ -18,10 +19,10 @@ internal readonly record struct QueryParameter
     this.queryParam = queryParam;
   }
 
-  public QueryParameter(string key, string value)
+  public QueryParameter(string key, object value)
   {
     Key = key;
-    Value = value;
+    Value = value.ToString();
     queryParam = $"{key}={value}";
   }
 
