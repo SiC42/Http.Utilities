@@ -5,28 +5,45 @@ using Sic.Http.Utilities.UrlBuilding.QueryParameters;
 
 namespace Sic.Http.Utilities.UrlBuilding;
 
+/// <summary>
+/// An immutable version of the <see cref="UrlBuilder"/>.
+/// This means that calling methods on this builder do provide an entirely new builder with the expected changes,
+/// but do not modify the internal state of this instance.
+/// </summary>
 public class ImmutableUrlBuilder : IUrlBuilder<ImmutableUrlBuilder>
 {
+  /// <inheritdoc />
   public string Scheme { get; private set; } // todo: validation for http(s)
 
-  private List<string> _segments;
-  public IReadOnlyList<string> Segments => _segments;
+  /// <inheritdoc />
   public string Host { get; private set; }
 
-  private QueryParameterCollection _queryParameters;
-  public IReadOnlyQueryParameterCollection QueryParameters => _queryParameters;
-
-  private Dictionary<string, string> _pathValues;
-  public IReadOnlyDictionary<string, string> PathValues => _pathValues.AsReadOnly();
-
+  /// <inheritdoc />
   public int Port { get; private set; }
 
+  private List<string> _segments;
+  /// <inheritdoc />
+  public IReadOnlyList<string> Segments => _segments;
 
+  private Dictionary<string, string> _pathValues;
+  /// <inheritdoc />
+  public IReadOnlyDictionary<string, string> PathValues => _pathValues.AsReadOnly();
+
+  private QueryParameterCollection _queryParameters;
+  /// <inheritdoc />
+  public IReadOnlyQueryParameterCollection QueryParameters => _queryParameters;
+
+  /// <summary>
+  /// Initializes a new instance of <see cref="ImmutableUrlBuilder"/>.
+  /// </summary>
   public ImmutableUrlBuilder(string url)
 : this(new Uri(url))
   {
   }
 
+  /// <summary>
+  /// Initializes a new instance of <see cref="ImmutableUrlBuilder"/>.
+  /// </summary>
   public ImmutableUrlBuilder(Uri url)
   {
     BuilderHelper.CheckScheme(url);
@@ -39,6 +56,10 @@ public class ImmutableUrlBuilder : IUrlBuilder<ImmutableUrlBuilder>
     _pathValues = [];
   }
 
+  /// <summary>
+  /// Initializes a new instance of <see cref="ImmutableUrlBuilder"/>.
+  /// </summary>
+  /// <remarks>Used internally to provide a way to deep copy the builder.</remarks>
   internal ImmutableUrlBuilder(
     string scheme,
     IReadOnlyList<string> segments,
@@ -55,6 +76,7 @@ public class ImmutableUrlBuilder : IUrlBuilder<ImmutableUrlBuilder>
     _queryParameters = [.. queryParameters];
   }
 
+  /// <inheritdoc />
   public ImmutableUrlBuilder SetScheme(string scheme)
   {
     BuilderHelper.CheckSchemeType(scheme);
@@ -69,6 +91,7 @@ public class ImmutableUrlBuilder : IUrlBuilder<ImmutableUrlBuilder>
     );
   }
 
+  /// <inheritdoc />
   public ImmutableUrlBuilder SetHost(string host)
   {
     BuilderHelper.CheckHost(host);
@@ -83,6 +106,7 @@ public class ImmutableUrlBuilder : IUrlBuilder<ImmutableUrlBuilder>
     );
   }
 
+  /// <inheritdoc />
   public ImmutableUrlBuilder SetPort(int port)
   {
     BuilderHelper.CheckPort(port);
@@ -97,7 +121,7 @@ public class ImmutableUrlBuilder : IUrlBuilder<ImmutableUrlBuilder>
     );
   }
 
-
+  /// <inheritdoc />
   public ImmutableUrlBuilder AddPath(string pathToAdd)
   {
     List<string> newSegmentList = [.. _segments, .. BuilderHelper.GetSegments(pathToAdd)];
@@ -112,8 +136,25 @@ public class ImmutableUrlBuilder : IUrlBuilder<ImmutableUrlBuilder>
     );
   }
 
+  /// <inheritdoc />
+  public ImmutableUrlBuilder WithPathValue(string pathKey, object value)
+  {
+    var newPathDict = new Dictionary<string, string>(_pathValues)
+    {
+      [pathKey] = value!.ToString()!
+    };
 
+    return new ImmutableUrlBuilder(
+      scheme: Scheme,
+      host: Host,
+      port: Port,
+      segments: Segments,
+      pathValues: newPathDict,
+      queryParameters: QueryParameters
+    );
+  }
 
+  /// <inheritdoc />
   public ImmutableUrlBuilder AddQuery(string key, params object[] values)
   {
     var newQueryParameters = new QueryParameterCollection(_queryParameters);
@@ -134,23 +175,7 @@ public class ImmutableUrlBuilder : IUrlBuilder<ImmutableUrlBuilder>
     );
   }
 
-  public ImmutableUrlBuilder WithPathValue(string pathKey, object value)
-  {
-    var newPathDict = new Dictionary<string, string>(_pathValues)
-    {
-      [pathKey] = value!.ToString()!
-    };
-
-    return new ImmutableUrlBuilder(
-      scheme: Scheme,
-      host: Host,
-      port: Port,
-      segments: Segments,
-      pathValues: newPathDict,
-      queryParameters: QueryParameters
-    );
-  }
-
+  /// <inheritdoc />
   public Uri Build()
   {
     return BuilderHelper.Build(this);
