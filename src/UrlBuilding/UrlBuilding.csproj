@@ -1,10 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNameSpace>Sic.Http.Utilities.UrlBuilding</RootNameSpace>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+
+  <PropertyGroup>
     <PackageId>Sic.Http.Utilities.UrlBuilding</PackageId>
+    <Description>Simple .NET URL building library</Description>
+    <PackageTags>fluent;url;uri;builder</PackageTags>
     <Version>0.9.0</Version>
     <Authors>Simon Bordewisch</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
