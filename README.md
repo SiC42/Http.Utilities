@@ -2,9 +2,9 @@
 **This is a work in progress**
 This repository provides packages to handle various aspects of HTTP calls, especially with `HttpClient`.
 
-
 ## Url.Building
 The package provides a way to handle building URLs.
+It aims to be easier to use than the .NET `UriBuilder`.
 
 ### Simple URL builder
 This implementation can be used to build URLs on the fly.
@@ -62,7 +62,7 @@ var builder2 = builder.AddPath("pathfor2")
 var url1 = builder.Build(); // https://mydomain.com/pathfor2
 var url2 = builder2.Build(); // https://mydomain.com/pathfor2
 ```
-This is especially annoying when the builder is initialized in the constructor and then further mutated in methods, e.g.
+This is especially bug prone when the builder is initialized in the constructor and then further mutated in methods, e.g.
 
 ```csharp
 public MyClient
