@@ -1,4 +1,4 @@
-# Http.Utitlies
+# Http.Utilities
 **This is a work in progress**
 This repository provides packages to handle various aspects of HTTP calls, especially with `HttpClient`.
 
@@ -9,7 +9,7 @@ The package provides a way to handle building URLs.
 ### Simple URL builder
 This implementation can be used to build URLs on the fly.
 
-####Examples
+#### Examples
 Basic Usage
 
 ```csharp
