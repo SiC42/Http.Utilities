@@ -8,15 +8,15 @@ internal interface IUrlBuilder<TUrlBuilder> : IReadOnlyUrlBuilder
 where TUrlBuilder : IUrlBuilder<TUrlBuilder>
 {
 
+  public TUrlBuilder SetScheme(string scheme);
+  public TUrlBuilder SetHost(string host);
+  public TUrlBuilder SetPort(int port);
   public TUrlBuilder AddPath(string pathToAdd);
+  public TUrlBuilder WithPathValue(string pathKey, object value);
   public TUrlBuilder AddQuery(string key, params object[] values);
 
-  public TUrlBuilder WithPathValue(string pathKey, object value);
-
   public Uri Build();
-  public TUrlBuilder SetPort(int port);
 
-  public TUrlBuilder SetHost(string host);
 }
 
 public interface IReadOnlyUrlBuilder
