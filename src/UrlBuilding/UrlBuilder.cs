@@ -81,11 +81,21 @@ public class UrlBuilder : IUrlBuilder<UrlBuilder>, IReadOnlyUrlBuilder
     return this;
   }
 
-
-
   public Uri Build()
   {
     return BuilderHelper.Build(this);
+  }
+
+  public ImmutableUrlBuilder AsImmutable()
+  {
+    return new ImmutableUrlBuilder(
+    scheme: Scheme,
+    host: Host,
+    port: Port,
+    segments: Segments,
+    pathValues: PathValues,
+    queryParameters: QueryParameters
+  );
   }
 
 }

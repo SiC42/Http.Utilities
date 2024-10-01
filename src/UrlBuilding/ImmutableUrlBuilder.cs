@@ -39,7 +39,7 @@ public class ImmutableUrlBuilder : IUrlBuilder<ImmutableUrlBuilder>
     _pathValues = [];
   }
 
-  private ImmutableUrlBuilder(
+  internal ImmutableUrlBuilder(
     string scheme,
     IReadOnlyList<string> segments,
     string host,
