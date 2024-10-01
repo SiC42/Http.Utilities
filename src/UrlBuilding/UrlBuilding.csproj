@@ -4,8 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PackageId>Sic.Http</PackageId>
-    <Version>0.0.1</Version>
+    <PackageId>Sic.Http.Utilities.UrlBuilding</PackageId>
+    <Version>0.9.0</Version>
     <Authors>Simon Bordewisch</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
