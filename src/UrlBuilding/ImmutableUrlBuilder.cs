@@ -16,8 +16,8 @@ public class ImmutableUrlBuilder : IUrlBuilder<ImmutableUrlBuilder>
   private QueryParameterCollection _queryParameters;
   public IReadOnlyQueryParameterCollection QueryParameters => _queryParameters;
 
-  private Dictionary<string, string> _pathDict;
-  public IReadOnlyDictionary<string, string> PathValues => _pathDict.AsReadOnly();
+  private Dictionary<string, string> _pathValues;
+  public IReadOnlyDictionary<string, string> PathValues => _pathValues.AsReadOnly();
 
   public int Port { get; private set; }
 
@@ -36,43 +36,65 @@ public class ImmutableUrlBuilder : IUrlBuilder<ImmutableUrlBuilder>
     Host = url.Host;
     _queryParameters = BuilderHelper.ToParameterCollection(url.Query);
     Port = url.Port;
-    _pathDict = [];
+    _pathValues = [];
   }
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-  private ImmutableUrlBuilder()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+  private ImmutableUrlBuilder(
+    string scheme,
+    IReadOnlyList<string> segments,
+    string host,
+    int port,
+    IReadOnlyDictionary<string, string> pathValues,
+    IReadOnlyQueryParameterCollection queryParameters)
   {
+    Scheme = scheme;
+    Host = host;
+    Port = port;
+    _segments = [.. segments];
+    _pathValues = pathValues.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+    _queryParameters = [.. queryParameters];
+  }
+
+  public ImmutableUrlBuilder SetScheme(string scheme)
+  {
+    BuilderHelper.CheckSchemeType(scheme);
+
+    return new ImmutableUrlBuilder(
+      scheme: scheme,
+      host: Host,
+      port: Port,
+      segments: _segments,
+      pathValues: PathValues,
+      queryParameters: QueryParameters
+    );
   }
 
   public ImmutableUrlBuilder SetHost(string host)
   {
     BuilderHelper.CheckHost(host);
 
-    return new ImmutableUrlBuilder()
-    {
-      Scheme = Scheme,
-      Host = host,
-      Port = Port,
-      _segments = _segments,
-      _pathDict = new(_pathDict),
-      _queryParameters = new(_queryParameters)
-    };
+    return new ImmutableUrlBuilder(
+      scheme: Scheme,
+      host: host,
+      port: Port,
+      segments: _segments,
+      pathValues: PathValues,
+      queryParameters: QueryParameters
+    );
   }
 
   public ImmutableUrlBuilder SetPort(int port)
   {
     BuilderHelper.CheckPort(port);
 
-    return new ImmutableUrlBuilder()
-    {
-      Scheme = Scheme,
-      Host = Host,
-      Port = port,
-      _segments = _segments,
-      _pathDict = new(_pathDict),
-      _queryParameters = new(_queryParameters)
-    };
+    return new ImmutableUrlBuilder(
+      scheme: Scheme,
+      host: Host,
+      port: port,
+      segments: _segments,
+      pathValues: PathValues,
+      queryParameters: QueryParameters
+    );
   }
 
 
@@ -80,15 +102,14 @@ public class ImmutableUrlBuilder : IUrlBuilder<ImmutableUrlBuilder>
   {
     List<string> newSegmentList = [.. _segments, .. BuilderHelper.GetSegments(pathToAdd)];
 
-    return new ImmutableUrlBuilder()
-    {
-      Scheme = Scheme,
-      Host = Host,
-      Port = Port,
-      _segments = newSegmentList,
-      _pathDict = new(_pathDict),
-      _queryParameters = new(_queryParameters)
-    };
+    return new ImmutableUrlBuilder(
+      scheme: Scheme,
+      host: Host,
+      port: Port,
+      segments: newSegmentList,
+      pathValues: PathValues,
+      queryParameters: QueryParameters
+    );
   }
 
 
@@ -103,32 +124,31 @@ public class ImmutableUrlBuilder : IUrlBuilder<ImmutableUrlBuilder>
     }
     newQueryParameters.AddRange(values.Select(v => new QueryParameter(key, v)));
 
-    return new ImmutableUrlBuilder()
-    {
-      Scheme = Scheme,
-      Host = Host,
-      Port = Port,
-      _segments = _segments,
-      _pathDict = new(_pathDict),
-      _queryParameters = newQueryParameters
-    };
+    return new ImmutableUrlBuilder(
+      scheme: Scheme,
+      host: Host,
+      port: Port,
+      segments: Segments,
+      pathValues: PathValues,
+      queryParameters: newQueryParameters
+    );
   }
 
   public ImmutableUrlBuilder WithPathValue(string pathKey, object value)
   {
-    var newPathDict = new Dictionary<string, string>(_pathDict)
+    var newPathDict = new Dictionary<string, string>(_pathValues)
     {
       [pathKey] = value!.ToString()!
     };
-    return new ImmutableUrlBuilder()
-    {
-      Scheme = Scheme,
-      Host = Host,
-      Port = Port,
-      _segments = _segments,
-      _pathDict = newPathDict,
-      _queryParameters = _queryParameters
-    };
+
+    return new ImmutableUrlBuilder(
+      scheme: Scheme,
+      host: Host,
+      port: Port,
+      segments: Segments,
+      pathValues: newPathDict,
+      queryParameters: QueryParameters
+    );
   }
 
   public Uri Build()
