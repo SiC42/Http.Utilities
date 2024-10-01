@@ -9,7 +9,15 @@ internal static partial class BuilderHelper
   {
     if (url.Scheme is not ("http" or "https"))
     {
-      throw new ArgumentOutOfRangeException(nameof(url), url, "Given URI was not an URL (type http or https)");
+      throw new NotSupportedException("Given URI was not an URL (type http or https). Other types are currently not supported.");
+    }
+  }
+
+  public static void CheckSchemeType(string scheme)
+  {
+    if (scheme is not ("http" or "https"))
+    {
+      throw new NotSupportedException("Given Scheme was not of type http or https. Other types are currently not supported.");
     }
   }
 
@@ -74,13 +82,20 @@ internal static partial class BuilderHelper
 
   private static Func<string, string> ReplaceVariables(IReadOnlyDictionary<string, string> valuePathDict)
   {
-    return pathSegment => VariablePattern().Replace(pathSegment, ReplaceKeyWithValue);
+    return pathSegment =>
+    {
+      // due to URL encoding, the symbol "{" and "}" might be tranlated to "%7B" & "%7D"
+      // for now we try to replace those values with the original {}
+      pathSegment = pathSegment
+        .Replace("%7B", "{")
+        .Replace("%7D", "}");
+      return VariablePattern().Replace(pathSegment, ReplaceKeyWithValue);
+    };
 
     string ReplaceKeyWithValue(Match m) => valuePathDict[m.Value[1..^1]];
   }
 
   [GeneratedRegex(@"\{\w+\}")]
   private static partial Regex VariablePattern();
-
 
 }
