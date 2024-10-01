@@ -15,8 +15,7 @@ internal class QueryParameterCollection : IReadOnlyQueryParameterCollection
   public QueryParameterCollection(QueryParameterCollection queryParameters)
   {
     _dictionary = queryParameters._dictionary
-      .Select(kvp => (kvp.Key, Values: kvp.Value))
-      .ToDictionary(kvp => kvp.Key, kvp => kvp.Values);
+      .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToList());
   }
 
   public void Add(QueryParameter parameter)
